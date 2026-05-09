@@ -22,15 +22,20 @@ func runInstructions(instructions []string) (positions []int, zeros int, err err
 		if atoiErr != nil {
 			return nil, 0, fmt.Errorf("bad instruction %q: %w", ins, atoiErr)
 		}
+
 		if dir == 'L' {
+			if n >= pos {
+				zeros += (n - pos) / 100
+				if pos > 0 {
+					zeros++
+				}
+			}
 			pos = mod(pos-n, 100)
 		} else {
+			zeros += (pos + n) / 100
 			pos = mod(pos+n, 100)
 		}
 		positions = append(positions, pos)
-		if pos == 0 {
-			zeros++
-		}
 	}
 	return positions, zeros, nil
 }
