@@ -38,10 +38,15 @@ func calculateTotalSum(input string) (int, error) {
 func isInvalidID(n int) bool {
 	s := strconv.Itoa(n)
 	l := len(s)
-	if l%2 == 1 {
-		return false
+	for k := 2; k <= l; k++ {
+		if l%k != 0 {
+			continue
+		}
+		if strings.Repeat(s[:l/k], k) == s {
+			return true
+		}
 	}
-	return s[:l/2] == s[l/2:]
+	return false
 }
 
 type IDRange struct {
