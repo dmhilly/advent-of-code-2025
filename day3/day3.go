@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func largestTwoDigitSubseq(s string) int {
@@ -24,6 +25,34 @@ func largestTwoDigitSubseq(s string) int {
 	return int(maxFirst-'0')*10 + int(maxSecond-'0')
 }
 
+func largestKDigitSubseq(s string, k int) int {
+	l := len(s)
+	skipsRemaining := l - k
+	idx := 0
+	var ret string
+
+	for len(ret) < k {
+		var largestNum byte = '0'
+		largestIdx := idx
+		for i := idx; i <= idx+skipsRemaining; i++ {
+			if s[i] > largestNum {
+				largestNum = s[i]
+				largestIdx = i
+			}
+		}
+
+		ret += string(largestNum)
+		idx = largestIdx + 1
+		skipsRemaining = l - k - (idx - len(ret))
+	}
+
+	n, err := strconv.Atoi(ret)
+	if err != nil {
+		panic(err)
+	}
+	return n
+}
+
 func main() {
 	f, err := os.Open("input.txt")
 	if err != nil {
@@ -39,7 +68,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		sum += largestTwoDigitSubseq(line)
+		sum += largestKDigitSubseq(line, 12)
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("read input.txt: %v\n", err)
